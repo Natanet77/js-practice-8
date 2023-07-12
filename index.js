@@ -138,11 +138,12 @@ console.log(createArray(1, 2, 3, 4, 5)); // Виведе [1, 2, 3, 4, 5]
  * Повертає Елемент з масиву за заданим індексом або `undefined`, якщо індекс виходить за межі масиву.
  */
 function getElementAtIndex(arr, index) {
-  if (arr.length !== 0) {
+  if (arr.length == 0) {
     return undefined;
   }
-  if (index == arr.length) {
-    return arr.at(index);
+  if (index >= 0 && index < arr.length) {
+    let element = arr[index];
+    return element;
   } else {
     return undefined;
   }
@@ -329,10 +330,11 @@ function customFill(arr, value, start = 0, end = arr.length) {
   if (!Array.isArray(arr)) {
     return false;
   }
-  if (start != 0 && end != arr.length) {
+  if (start < 0 || end > arr.length || start > end) {
     return false;
   }
-  return arr.fill(value, start, end);
+  arr.fill(value, start, end);
+  return arr;
   // Перевірка вхідних параметрів
   // якщо arr не масив повертаємо false
   // якщо start та end не входять в діапазон від 0 до довжини масиву arr повертаємо false
@@ -381,10 +383,15 @@ console.log(customShift([1, 2, 3, 4, 5])); // Виведе { shiftedElement: 1, 
  *  Нова довжина масиву після додавання елементів.
  */
 function customUnshift(arr, ...elements) {
-  if (Array.isArray(arr)) {
-    let initialLength = arr.length;
-    arr.unshift();
+  if (!Array.isArray(arr)) {
+    return;
   }
+  const initialLength = arr.length;
+  for (let i = elements.length - 1; i >= 0; i--) {
+    arr.unshift(elements[i]);
+  }
+  const newLength = arr.length;
+  return { initialLength, newLength, arr };
   // Перевіряємо, чи вхідний параметр є масивом
   // Зберігаємо початкову довжину масиву в змінну initialLength
   // Додаємо елементи на початок масиву за допомогою методу `unshift` та циклу for, початкове значення лічильника на 1 менше ніж довжина масива,
@@ -439,18 +446,19 @@ function customAt(arr, index) {
   if (!Array.isArray(arr)) {
     return undefined;
   }
-  if (index == arr.length) {
+  if (index < 0 || index >= arr.length) {
     return undefined;
   }
-  console.log(arr.at(index));
+  const element = arr.at(index);
 
-  // index === "number"
-  //   ? "Елемент є числом"
-  //   : index === "string"
-  //   ? "Елемент є рядком"
-  //   : index === "object"
-  //   ? "Елемент є обєктом"
-
+  if (typeof element === "string") {
+    console.log("Елемент є рядком.");
+  } else if (typeof element === "object") {
+    console.log("Елемент є обєктом.");
+  } else if (typeof element === "number") {
+    console.log("Елемент є числом.");
+  }
+  return element;
   // Перевіряємо, чи вхідний параметр є масивом якщо ні повертаємо undefined
   // Перевіряємо, чи індекс виходить за межі масиву якщо ні повертаємо undefined
   // Отримуємо елемент масиву за заданим індексом
@@ -476,10 +484,12 @@ console.log(customAt([1, 2, 3, 4, 5], 2));
   */
 function customIncludes(arr, element) {
   if (!Array.isArray(arr)) {
-    arr.includes(element);
-    return arr.filter(element);
+    return false;
   }
-
+  const result = arr.includes(element);
+  const count = arr.filter((item) => item === element).length;
+  console.log(count);
+  return result;
   // Перевіряємо, чи вхідний параметр є масивом
   // Використовуємо метод includes для перевірки наявності елемента в масиві
   // За допомогою методу filter перевіряємо скільки разів в масиві зустрічається елемент та виводимо число в консоль
