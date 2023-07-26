@@ -51,6 +51,7 @@ function removeLastElement(arr) {
     arr.pop();
   }
   return arr;
+
   // Перевіряємо, чи масив не є порожнім, якщо порожній повертаємо  undefined
   // Використовуємо метод `pop` для видалення останнього елементу з масиву
   // Повертаємо оновлений масив
@@ -116,7 +117,11 @@ console.log(checkArray([1, 2, 3, 4, 5])); // Виведе true
  * Повертає: Новий масив з переданих елементів.
  */
 function createArray(...elements) {
-  return Array.of(...elements);
+  if (elements.length > 0) {
+    return Array.of(...elements);
+  } else {
+    return Array.of();
+  }
 
   // Перевіряємо, чи кількість переданих елементів більше нуля
   // Використовуємо метод `Array.of` для створення нового масиву з переданих елементів
